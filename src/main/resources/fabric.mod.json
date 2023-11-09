@@ -1,0 +1,44 @@
+{
+	"schemaVersion": 1,
+	"id": "redstonery",
+	"version": "${version}",
+	"name": "Redstonery",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"Me!"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/redstonery/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.redstonery.Redstonery"
+		],
+		"client": [
+			"com.redstonery.RedstoneryClient"
+		],
+		"fabric-datagen": [
+			"com.redstonery.RedstoneryDataGenerator"
+		]
+	},
+	"mixins": [
+		"redstonery.mixins.json",
+		{
+			"config": "redstonery.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.14.24",
+		"minecraft": "~1.20.2",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
