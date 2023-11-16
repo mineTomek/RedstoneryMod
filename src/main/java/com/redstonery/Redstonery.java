@@ -1,11 +1,14 @@
 package com.redstonery;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.ItemGroups;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 
@@ -28,6 +31,23 @@ public class Redstonery implements ModInitializer {
 
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.REDSTONE).register(content -> {
 			content.add(REDSTONE_SELECTOR);
+		});
+
+		AttackBlockCallback.EVENT.register((player, world, hand, pos, direction) -> {
+			if (hand != Hand.MAIN_HAND
+					|| player.getStackInHand(hand).getItem() != Redstonery.REDSTONE_SELECTOR
+					|| player.getItemCooldownManager().isCoolingDown(REDSTONE_SELECTOR)) {
+				return ActionResult.PASS;
+			}
+
+			LOGGER.info("Block " + world.getBlockState(pos).getBlock().getName() + " attacked by " + player.getName());
+
+			((RedstoneSelector) player.getStackInHand(hand).getItem()).onSelect(player, pos, world);
+
+			player.getStackInHand(hand).getOrCreateNbt().putIntArray("redstonery.pos2",
+					new int[] { pos.getX(), pos.getY(), pos.getZ() });
+
+			return ActionResult.FAIL;
 		});
 	}
 }

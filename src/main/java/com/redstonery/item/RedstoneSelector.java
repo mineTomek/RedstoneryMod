@@ -1,17 +1,15 @@
 package com.redstonery.item;
 
-import java.util.List;
-
 import com.redstonery.Redstonery;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.sound.SoundEvents;
+import net.minecraft.item.ItemUsageContext;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -21,12 +19,15 @@ public class RedstoneSelector extends Item {
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
-        if (hand != Hand.MAIN_HAND) {
-            return TypedActionResult.fail(player.getStackInHand(hand));
+    public ActionResult useOnBlock(ItemUsageContext context) {
+        if (context.getHand() != Hand.MAIN_HAND) {
+            return ActionResult.PASS;
         }
 
-        ItemStack handStack = player.getStackInHand(hand);
+        ItemStack handStack = context.getStack();
+
+        PlayerEntity player = context.getPlayer();
+
         if (player.isSneaking()) {
             handStack.getOrCreateNbt();
 
@@ -41,24 +42,41 @@ public class RedstoneSelector extends Item {
                         ((Integer) pos2[1]).toString(), ((Integer) pos2[2]).toString())));
             }
 
-            return TypedActionResult.success(handStack, false);
+            return ActionResult.SUCCESS;
         }
 
-        player.playSound(SoundEvents.BLOCK_WOOL_BREAK, 1.0F, 1.0F);
+        if (player.getItemCooldownManager().isCoolingDown(this)) {
+            return ActionResult.PASS;
+        }
+
+        BlockPos targetBlock = context.getBlockPos();
+
+        onSelect(player, targetBlock, context.getWorld());
 
         handStack.getOrCreateNbt().putIntArray("redstonery.pos1",
-                new int[] { player.getBlockPos().getX(), player.getBlockPos().getY(), player.getBlockPos().getZ() });
+                new int[] { targetBlock.getX(), targetBlock.getY(), targetBlock.getZ() });
 
-        return TypedActionResult.success(handStack, false);
+        return ActionResult.SUCCESS;
     }
 
-    @Override
-    public boolean canMine(BlockState state, World world, BlockPos pos, PlayerEntity miner) {
-        Redstonery.LOGGER.info("canMine()!");
+    public void onSelect(PlayerEntity player, BlockPos pos, World world) {
+        Redstonery.LOGGER.info("indicating selection");
 
-        miner.getStackInHand(Hand.MAIN_HAND).getOrCreateNbt().putIntArray("redstonery.pos2",
-                new int[] { miner.getBlockPos().getX(), miner.getBlockPos().getY(), miner.getBlockPos().getZ() });
+        player.playSound(world.getBlockState(pos).getSoundGroup().getBreakSound(), 1.0F, 1.0F);
 
-        return true;
+        player.getItemCooldownManager().set(this, 10);
+
+        world.addParticle(ParticleTypes.CLOUD, pos.getX() + .5, pos.getY() + 1,
+                pos.getZ() + .6, 0, .1,
+                0);
     }
+
+    // @Override
+    // public boolean onClicked(ItemStack stack, ItemStack otherStack, Slot slot,
+    // ClickType clickType, PlayerEntity player,
+    // StackReference cursorStackReference) {
+    // Redstonery.LOGGER.info("onClicked: " + clickType.name());
+    // return super.onClicked(stack, otherStack, slot, clickType, player,
+    // cursorStackReference);
+    // }
 }
