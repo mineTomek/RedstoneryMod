@@ -14,14 +14,29 @@ public class RedstoneryClient implements ClientModInitializer {
 	Vec3d pos1 = null;
 	Vec3d pos2 = null;
 
+	double cornersSizeMargin = 1 * Math.pow(10, -3);
+	double mainSelectionSizeMargin = .5 * Math.pow(10, -2);
+
 	@Override
 	public void onInitializeClient() {
 		RenderEvents.WORLD.register(matrixStack -> {
 			if (pos1 != null && pos2 != null) {
 				Renderer3d.renderOutline(matrixStack, Color.WHITE,
-						new Vec3d(Math.min(pos1.x, pos2.x), Math.min(pos1.y, pos2.y), Math.min(pos1.z, pos2.z)),
+						new Vec3d(Math.min(pos1.x, pos2.x), Math.min(pos1.y, pos2.y), Math.min(pos1.z, pos2.z))
+								.subtract(mainSelectionSizeMargin / 2, mainSelectionSizeMargin / 2,
+										mainSelectionSizeMargin / 2),
 						new Vec3d(Math.abs(pos1.getX() - pos2.getX()), Math.abs(pos1.getY() - pos2.getY()),
-								Math.abs(pos1.getZ() - pos2.getZ())));
+								Math.abs(pos1.getZ() - pos2.getZ()))
+								.add(1 + mainSelectionSizeMargin, 1 + mainSelectionSizeMargin,
+										1 + mainSelectionSizeMargin));
+
+				Renderer3d.renderEdged(matrixStack, Renderer3d.modifyColor(Color.BLUE, -1, -1, -1, 64), Color.BLUE,
+						pos1.subtract(cornersSizeMargin / 2, cornersSizeMargin / 2, cornersSizeMargin / 2),
+						new Vec3d(1 + cornersSizeMargin, 1 + cornersSizeMargin, 1 + cornersSizeMargin));
+
+				Renderer3d.renderEdged(matrixStack, Renderer3d.modifyColor(Color.RED, -1, -1, -1, 64), Color.RED,
+						pos2.subtract(cornersSizeMargin / 2, cornersSizeMargin / 2, cornersSizeMargin / 2),
+						new Vec3d(1 + cornersSizeMargin, 1 + cornersSizeMargin, 1 + cornersSizeMargin));
 			}
 		});
 
@@ -42,6 +57,9 @@ public class RedstoneryClient implements ClientModInitializer {
 					pos1 = new Vec3d(nbtPos1[0], nbtPos1[1], nbtPos1[2]);
 					pos2 = new Vec3d(nbtPos2[0], nbtPos2[1], nbtPos2[2]);
 				}
+			} else {
+				pos1 = null;
+				pos2 = null;
 			}
 		});
 	}
