@@ -3,13 +3,14 @@
 	"id": "redstonery",
 	"version": "${version}",
 	"name": "Redstonery",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "This is a mod that allows for integration between Redstonery and Minecraft.",
 	"authors": [
-		"Me!"
+		"mineTomek"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://github.com/mineTomek/RedstoneryMod",
+		"sources": "https://github.com/mineTomek/RedstoneryMod",
+		"issues": "https://github.com/mineTomek/Redstonery/issues"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/redstonery/icon.png",
@@ -39,6 +40,6 @@
 		"fabric-api": "*"
 	},
 	"suggests": {
-		"another-mod": "*"
+		"modmenu": "*"
 	}
 }
