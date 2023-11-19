@@ -25,8 +25,6 @@ public class Redstonery implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		LOGGER.info("Hello, Fabric world from Redstonery!");
-
 		Registry.register(Registries.ITEM, new Identifier("redstonery", "redstone_selector"), REDSTONE_SELECTOR);
 
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.REDSTONE).register(content -> {
