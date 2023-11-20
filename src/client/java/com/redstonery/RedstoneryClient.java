@@ -9,6 +9,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -24,7 +25,12 @@ public class RedstoneryClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		RenderEvents.WORLD.register(matrixStack -> {
+			MinecraftClient client = MinecraftClient.getInstance();
 			if (pos1 != null && pos2 != null) {
+				if (client.player.isSneaking()) {
+					Renderer3d.renderThroughWalls();
+				}
+
 				Renderer3d.renderOutline(matrixStack, Color.WHITE,
 						new Vec3d(Math.min(pos1.x, pos2.x), Math.min(pos1.y, pos2.y), Math.min(pos1.z, pos2.z))
 								.subtract(mainSelectionSizeMargin / 2, mainSelectionSizeMargin / 2,
@@ -41,6 +47,10 @@ public class RedstoneryClient implements ClientModInitializer {
 				Renderer3d.renderEdged(matrixStack, Renderer3d.modifyColor(Color.RED, -1, -1, -1, 64), Color.RED,
 						pos2.subtract(cornersSizeMargin / 2, cornersSizeMargin / 2, cornersSizeMargin / 2),
 						new Vec3d(1 + cornersSizeMargin, 1 + cornersSizeMargin, 1 + cornersSizeMargin));
+
+				if (client.player.isSneaking()) {
+					Renderer3d.stopRenderThroughWalls();
+				}
 			}
 		});
 
