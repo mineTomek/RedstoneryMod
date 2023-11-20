@@ -1,0 +1,6 @@
+{
+    "parent": "minecraft:item/generated",
+    "textures": {
+        "layer0": "redstonery:item/redstone_selector_active"
+    }
+}

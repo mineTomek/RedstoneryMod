@@ -2,5 +2,13 @@
     "parent": "minecraft:item/generated",
     "textures": {
         "layer0": "redstonery:item/redstone_selector"
-    }
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "on-cooldown": 1
+            },
+            "model": "redstonery:item/redstone_selector_active"
+        }
+    ]
 }

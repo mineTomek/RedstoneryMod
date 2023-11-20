@@ -4,10 +4,14 @@ import java.awt.Color;
 
 import me.x150.renderer.event.RenderEvents;
 import me.x150.renderer.render.Renderer3d;
+
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.minecraft.client.item.ModelPredicateProviderRegistry;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 
 public class RedstoneryClient implements ClientModInitializer {
@@ -62,5 +66,17 @@ public class RedstoneryClient implements ClientModInitializer {
 				pos2 = null;
 			}
 		});
+
+		ModelPredicateProviderRegistry.register(Redstonery.REDSTONE_SELECTOR.asItem(), new Identifier("on-cooldown"),
+				(itemStack, clientWorld, livingEntity, mysteriousInteger) -> {
+					if (livingEntity == null) {
+						return 0.0F;
+					}
+					return livingEntity.getMainHandStack() == itemStack
+							&& ((PlayerEntity) livingEntity).getItemCooldownManager().isCoolingDown(itemStack.getItem())
+									? 1.0F
+									: 0.0F;
+				});
+
 	}
 }
