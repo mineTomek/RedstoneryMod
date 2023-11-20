@@ -1,0 +1,29 @@
+on:
+  push:
+    branches:
+    - main
+  workflow_dispatch:
+
+jobs:
+  publish_the_mod:
+    name: Publish To Modrinth and GitHub
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          modrinth-id: P9DbqD2L
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+
+          github-tag: mc1.20.2-0.0.1
+          github-prerelease: true
+          github-token: ${{ secrets._GITHUB_TOKEN }}
+
+          name: Redstonery Mod 0.0.1 for Minecraft 1.20.2
+          version: mc1.20.2-0.0.1
+          version-type: alpha
+          changelog-file: CHANGELOG.*
+
+          loaders: |
+            fabric
+          game-versions: |
+            1.20.2
