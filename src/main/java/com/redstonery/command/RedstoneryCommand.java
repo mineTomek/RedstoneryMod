@@ -10,7 +10,8 @@ import static net.minecraft.server.command.CommandManager.*;
 import net.minecraft.server.command.ServerCommandSource;
 
 public final class RedstoneryCommand {
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
+    public static void register(CommandDispatcher<ServerCommandSource> dispatcher, Set<Circuit> circuits) {
+
         dispatcher.register(literal("redstonery")
                 .requires(source -> source.hasPermissionLevel(1))
                 .then(literal("circuit")
