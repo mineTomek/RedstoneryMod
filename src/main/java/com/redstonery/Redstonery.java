@@ -1,6 +1,7 @@
 package com.redstonery;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
@@ -15,6 +16,7 @@ import net.minecraft.util.Rarity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.redstonery.command.RedstoneryCommand;
 import com.redstonery.item.RedstoneSelector;
 
 public class Redstonery implements ModInitializer {
@@ -47,5 +49,8 @@ public class Redstonery implements ModInitializer {
 
 			return ActionResult.FAIL;
 		});
+
+		CommandRegistrationCallback.EVENT
+				.register((dispatcher, registryAccess, environment) -> RedstoneryCommand.register(dispatcher));
 	}
 }
