@@ -4,10 +4,15 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import com.redstonery.Circuit;
 
 import static net.minecraft.server.command.CommandManager.*;
 
+import java.util.Set;
+
+import net.minecraft.command.CommandException;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.text.Text;
 
 public final class RedstoneryCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, Set<Circuit> circuits) {
