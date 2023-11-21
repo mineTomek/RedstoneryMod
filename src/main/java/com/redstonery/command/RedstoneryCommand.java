@@ -15,7 +15,8 @@ public final class RedstoneryCommand {
                 .requires(source -> source.hasPermissionLevel(1))
                 .then(literal("circuit")
                         .then(literal("add")
-                                .then(argument("name", StringArgumentType.word())))
+                                .then(argument("name", StringArgumentType.word())
+                                        .executes(ctx -> addCircuit(ctx, circuits))))
                         .then(literal("list"))
                         .then(literal("modify")
                                 .then(argument("name", StringArgumentType.word())
@@ -27,5 +28,33 @@ public final class RedstoneryCommand {
                                         .then(literal("selection")
                                                 .then(literal("give"))
                                                 .then(literal("replace")))))));
+    }
+
+    private static int addCircuit(CommandContext<ServerCommandSource> ctx, Set<Circuit> circuits) {
+        String circuitName = StringArgumentType.getString(ctx, "name");
+
+        Circuit circuit = new Circuit(circuitName);
+
+        if (containsCircuitWithName(circuits, circuitName)) {
+            throw new CommandException(Text.translatable("commands.redstonery.error.circuit_exists", circuitName));
+        }
+
+        circuits.add(circuit);
+            ctx.getSource().sendFeedback(() -> Text.of(String.valueOf(circuits.size())),
+                    true);
+
+            ctx.getSource().sendFeedback(() -> Text.translatable("commands.redstonery.addedCircuit", circuitName),
+                    true);
+
+            return Command.SINGLE_SUCCESS;
+    }
+
+    private static boolean containsCircuitWithName(Set<Circuit> circuits, String targetName) {
+        for (Circuit circuit : circuits) {
+            if (circuit.getName().equals(targetName)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
