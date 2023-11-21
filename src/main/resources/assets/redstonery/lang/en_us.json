@@ -1,5 +1,7 @@
 {
     "item.redstonery.redstone_selector": "Redstone Selector",
     "item.redstonery.redstone_selector.tooltip.pos1": "Position 1: %d",
-    "item.redstonery.redstone_selector.tooltip.pos2": "Position 2: %d"
+    "item.redstonery.redstone_selector.tooltip.pos2": "Position 2: %d",
+    "commands.redstonery.addedCircuit": "Added circuit \"%d\"",
+    "commands.redstonery.error.circuit_exists": "Circuit \"%d\" already exists"
 }
