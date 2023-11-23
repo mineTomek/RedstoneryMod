@@ -1,5 +1,5 @@
 # CHANGELOG
- Ordered from the newest to the oldest versions
+Ordered from the newest to the oldest versions
 
 ### v0.0.1
 - Add `Redstone Selector` item
