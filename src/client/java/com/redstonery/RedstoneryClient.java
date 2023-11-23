@@ -19,18 +19,19 @@ public class RedstoneryClient implements ClientModInitializer {
 	Vec3d pos1 = null;
 	Vec3d pos2 = null;
 
-	double cornersSizeMargin = 1 * Math.pow(10, -3);
-	double mainSelectionSizeMargin = .5 * Math.pow(10, -2);
+	final double cornersSizeMargin = 1 * Math.pow(10, -3);
+	final double mainSelectionSizeMargin = .5 * Math.pow(10, -2);
 
 	@Override
 	public void onInitializeClient() {
 		RenderEvents.WORLD.register(matrixStack -> {
 			MinecraftClient client = MinecraftClient.getInstance();
-			if (pos1 != null && pos2 != null) {
-				if (client.player.isSneaking()) {
-					Renderer3d.renderThroughWalls();
-				}
 
+			if (client.player.isSneaking()) {
+				Renderer3d.renderThroughWalls();
+			}
+
+			if (pos1 != null && pos2 != null) {
 				Renderer3d.renderOutline(matrixStack, Color.WHITE,
 						new Vec3d(Math.min(pos1.x, pos2.x), Math.min(pos1.y, pos2.y), Math.min(pos1.z, pos2.z))
 								.subtract(mainSelectionSizeMargin / 2, mainSelectionSizeMargin / 2,
@@ -39,18 +40,22 @@ public class RedstoneryClient implements ClientModInitializer {
 								Math.abs(pos1.getZ() - pos2.getZ()))
 								.add(1 + mainSelectionSizeMargin, 1 + mainSelectionSizeMargin,
 										1 + mainSelectionSizeMargin));
+			}
 
+			if (pos1 != null) {
 				Renderer3d.renderEdged(matrixStack, Renderer3d.modifyColor(Color.BLUE, -1, -1, -1, 64), Color.BLUE,
 						pos1.subtract(cornersSizeMargin / 2, cornersSizeMargin / 2, cornersSizeMargin / 2),
 						new Vec3d(1 + cornersSizeMargin, 1 + cornersSizeMargin, 1 + cornersSizeMargin));
+			}
 
+			if (pos2 != null) {
 				Renderer3d.renderEdged(matrixStack, Renderer3d.modifyColor(Color.RED, -1, -1, -1, 64), Color.RED,
 						pos2.subtract(cornersSizeMargin / 2, cornersSizeMargin / 2, cornersSizeMargin / 2),
 						new Vec3d(1 + cornersSizeMargin, 1 + cornersSizeMargin, 1 + cornersSizeMargin));
+			}
 
-				if (client.player.isSneaking()) {
-					Renderer3d.stopRenderThroughWalls();
-				}
+			if (client.player.isSneaking()) {
+				Renderer3d.stopRenderThroughWalls();
 			}
 		});
 
@@ -64,11 +69,15 @@ public class RedstoneryClient implements ClientModInitializer {
 			if (stack.getItem() == Redstonery.REDSTONE_SELECTOR) {
 				stack.getOrCreateNbt();
 
-				if (stack.getNbt().contains("redstonery.pos1") && stack.getNbt().contains("redstonery.pos2")) {
+				if (stack.getNbt().contains("redstonery.pos1")) {
 					int[] nbtPos1 = stack.getNbt().getIntArray("redstonery.pos1");
-					int[] nbtPos2 = stack.getNbt().getIntArray("redstonery.pos2");
 
 					pos1 = new Vec3d(nbtPos1[0], nbtPos1[1], nbtPos1[2]);
+				}
+
+				if (stack.getNbt().contains("redstonery.pos2")) {
+					int[] nbtPos2 = stack.getNbt().getIntArray("redstonery.pos2");
+
 					pos2 = new Vec3d(nbtPos2[0], nbtPos2[1], nbtPos2[2]);
 				}
 			} else {
