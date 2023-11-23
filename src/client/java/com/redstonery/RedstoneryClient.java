@@ -19,8 +19,8 @@ public class RedstoneryClient implements ClientModInitializer {
 	Vec3d pos1 = null;
 	Vec3d pos2 = null;
 
-	double cornersSizeMargin = 1 * Math.pow(10, -3);
-	double mainSelectionSizeMargin = .5 * Math.pow(10, -2);
+	final double cornersSizeMargin = 1 * Math.pow(10, -3);
+	final double mainSelectionSizeMargin = .5 * Math.pow(10, -2);
 
 	@Override
 	public void onInitializeClient() {
