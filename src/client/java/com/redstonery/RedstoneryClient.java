@@ -26,11 +26,12 @@ public class RedstoneryClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		RenderEvents.WORLD.register(matrixStack -> {
 			MinecraftClient client = MinecraftClient.getInstance();
-			if (pos1 != null && pos2 != null) {
-				if (client.player.isSneaking()) {
-					Renderer3d.renderThroughWalls();
-				}
 
+			if (client.player.isSneaking()) {
+				Renderer3d.renderThroughWalls();
+			}
+
+			if (pos1 != null && pos2 != null) {
 				Renderer3d.renderOutline(matrixStack, Color.WHITE,
 						new Vec3d(Math.min(pos1.x, pos2.x), Math.min(pos1.y, pos2.y), Math.min(pos1.z, pos2.z))
 								.subtract(mainSelectionSizeMargin / 2, mainSelectionSizeMargin / 2,
@@ -39,18 +40,22 @@ public class RedstoneryClient implements ClientModInitializer {
 								Math.abs(pos1.getZ() - pos2.getZ()))
 								.add(1 + mainSelectionSizeMargin, 1 + mainSelectionSizeMargin,
 										1 + mainSelectionSizeMargin));
+			}
 
+			if (pos1 != null) {
 				Renderer3d.renderEdged(matrixStack, Renderer3d.modifyColor(Color.BLUE, -1, -1, -1, 64), Color.BLUE,
 						pos1.subtract(cornersSizeMargin / 2, cornersSizeMargin / 2, cornersSizeMargin / 2),
 						new Vec3d(1 + cornersSizeMargin, 1 + cornersSizeMargin, 1 + cornersSizeMargin));
+			}
 
+			if (pos2 != null) {
 				Renderer3d.renderEdged(matrixStack, Renderer3d.modifyColor(Color.RED, -1, -1, -1, 64), Color.RED,
 						pos2.subtract(cornersSizeMargin / 2, cornersSizeMargin / 2, cornersSizeMargin / 2),
 						new Vec3d(1 + cornersSizeMargin, 1 + cornersSizeMargin, 1 + cornersSizeMargin));
+			}
 
-				if (client.player.isSneaking()) {
-					Renderer3d.stopRenderThroughWalls();
-				}
+			if (client.player.isSneaking()) {
+				Renderer3d.stopRenderThroughWalls();
 			}
 		});
 
