@@ -64,11 +64,15 @@ public class RedstoneryClient implements ClientModInitializer {
 			if (stack.getItem() == Redstonery.REDSTONE_SELECTOR) {
 				stack.getOrCreateNbt();
 
-				if (stack.getNbt().contains("redstonery.pos1") && stack.getNbt().contains("redstonery.pos2")) {
+				if (stack.getNbt().contains("redstonery.pos1")) {
 					int[] nbtPos1 = stack.getNbt().getIntArray("redstonery.pos1");
-					int[] nbtPos2 = stack.getNbt().getIntArray("redstonery.pos2");
 
 					pos1 = new Vec3d(nbtPos1[0], nbtPos1[1], nbtPos1[2]);
+				}
+
+				if (stack.getNbt().contains("redstonery.pos2")) {
+					int[] nbtPos2 = stack.getNbt().getIntArray("redstonery.pos2");
+
 					pos2 = new Vec3d(nbtPos2[0], nbtPos2[1], nbtPos2[2]);
 				}
 			} else {
