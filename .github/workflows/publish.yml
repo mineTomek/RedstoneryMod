@@ -22,6 +22,14 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
+      - name: Read and extract versions from gradle.properties
+        id: extract-versions
+        run: |
+          VERSION=$(grep 'mod_version=' gradle.properties | cut -d'=' -f2 | tr -d '[:space:]')
+          MINECRAFT_VERSION=$(grep 'minecraft_version=' gradle.properties | cut -d'=' -f2 | tr -d '[:space:]')
+          echo "VERSION=${{ VERSION }}" >> $GITHUB_ENV
+          echo "MINECRAFT_VERSION=${{ MINECRAFT_VERSION }}" >> $GITHUB_ENV
+
       - name: Build artifacts
         run: ./gradlew clean build
 
@@ -30,16 +38,16 @@ jobs:
           modrinth-id: P9DbqD2L
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
 
-          github-tag: mc1.20.2-0.0.2
+          github-tag: mc${{ env.MINECRAFT_VERSION }}-${{ env.VERSION }}
           github-prerelease: true
           github-token: ${{ secrets._GITHUB_TOKEN }}
 
-          name: Redstonery Mod 0.0.2 for Minecraft 1.20.2
-          version: mc1.20.2-0.0.2
+          name: Redstonery Mod ${{ env.VERSION }} for Minecraft ${{ env.MINECRAFT_VERSION }}
+          version: mc${{ env.MINECRAFT_VERSION }}-${{ env.VERSION }}
           version-type: alpha
           changelog-file: CHANGELOG.md
 
           loaders: |
             fabric
           game-versions: |
-            1.20.2
+            ${{ env.MINECRAFT_VERSION }}
