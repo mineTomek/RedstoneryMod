@@ -1,6 +1,12 @@
 # CHANGELOG
 Ordered from the newest to the oldest versions
 
+### v0.0.2
+- Fix #3 by breaking up `if` statements in rendering event and in the loading positions from nbt
+- Remove the rounded corners from the mod icon
+- Update the mod description to match the style of the other mods
+- Minor internal tweaks
+
 ### v0.0.1
 - Add `Redstone Selector` item
 - Add right-click and left-click events
