@@ -30,12 +30,12 @@ jobs:
           modrinth-id: P9DbqD2L
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
 
-          github-tag: mc1.20.2-0.0.1
+          github-tag: mc1.20.2-0.0.2
           github-prerelease: true
           github-token: ${{ secrets._GITHUB_TOKEN }}
 
-          name: Redstonery Mod 0.0.1 for Minecraft 1.20.2
-          version: mc1.20.2-0.0.1
+          name: Redstonery Mod 0.0.2 for Minecraft 1.20.2
+          version: mc1.20.2-0.0.2
           version-type: alpha
           changelog-file: CHANGELOG.md
 
