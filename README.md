@@ -1,3 +1,4 @@
+![Redstonery Title Image](https://cdn.modrinth.com/data/P9DbqD2L/images/77f3e9937561fdf957dc5bead8cd5ad070d54b02.png)
 # RedstoneryMod
 Minecraft mod for making datasets for Redstonery
 
