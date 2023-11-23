@@ -46,9 +46,6 @@ public final class RedstoneryCommand {
         }
 
         circuits.add(circuit);
-            ctx.getSource().sendFeedback(() -> Text.of(String.valueOf(circuits.size())),
-                    true);
-
             ctx.getSource().sendFeedback(() -> Text.translatable("commands.redstonery.addedCircuit", circuitName),
                     true);
 
