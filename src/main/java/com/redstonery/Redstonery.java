@@ -13,9 +13,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +25,9 @@ public class Redstonery implements ModInitializer {
 	public static final RedstoneSelector REDSTONE_SELECTOR = new RedstoneSelector(
 			new FabricItemSettings().rarity(Rarity.EPIC).maxCount(1));
 
-	private Set<Circuit> circuits = new HashSet<Circuit>();
+	public static final String MOD_ID = "redstonery";
+
+	public static final Identifier CIRCUITS = new Identifier(MOD_ID, "circuits");
 
 	@Override
 	public void onInitialize() {
@@ -57,6 +56,6 @@ public class Redstonery implements ModInitializer {
 
 		CommandRegistrationCallback.EVENT
 				.register(
-						(dispatcher, registryAccess, environment) -> RedstoneryCommand.register(dispatcher, circuits));
+						(dispatcher, registryAccess, environment) -> RedstoneryCommand.register(dispatcher));
 	}
 }
