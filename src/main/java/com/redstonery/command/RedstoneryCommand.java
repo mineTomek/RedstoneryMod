@@ -97,8 +97,10 @@ public final class RedstoneryCommand {
         if (circuits.isEmpty()) {
                 ctx.getSource().sendFeedback(() -> Text.translatable("commands.redstonery.circuitListEmpty"), true);
         } else {
+                ctx.getSource().sendFeedback(() -> Text.translatable("commands.redstonery.listCircuits"), true);
+
                 for (Circuit circuit : circuits) {
-                        ctx.getSource().sendFeedback(() -> Text.of(circuit.getName()), true);
+                        ctx.getSource().sendFeedback(() -> Text.of("- " + circuit.getName()), true);
                 }
         }
 
