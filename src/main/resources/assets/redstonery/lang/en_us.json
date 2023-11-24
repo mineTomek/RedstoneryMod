@@ -4,7 +4,7 @@
     "item.redstonery.redstone_selector.tooltip.pos2": "Position 2: %d",
     "commands.redstonery.addedCircuit": "Added circuit \"%d\"",
     "commands.redstonery.error.circuit_exists": "Circuit \"%d\" already exists",
-    "commands.redstonery.listCircuits": "Circuits: %d",
+    "commands.redstonery.listCircuits": "Circuits:",
     "commands.redstonery.circuitListEmpty": "Circuits list is empty",
     "commands.redstonery.clearedCircuits": "Successfully cleared circuit list"
 }
