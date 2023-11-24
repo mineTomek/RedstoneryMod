@@ -24,6 +24,10 @@ public class Circuit {
         return Collections.unmodifiableSet(descriptions);
     }
 
+    public void clearDescriptions() {
+        descriptions.clear();
+    }
+
     public void addDescription(String description) {
         descriptions.add(description);
     }
