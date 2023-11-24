@@ -21,12 +21,10 @@ public class Circuit {
     }
 
     public Set<String> getDescriptions() {
-        // Return an unmodifiable view of the descriptions set to prevent external modification
         return Collections.unmodifiableSet(descriptions);
     }
 
     public void addDescription(String description) {
-        // Add a description to the set
         descriptions.add(description);
     }
 }
