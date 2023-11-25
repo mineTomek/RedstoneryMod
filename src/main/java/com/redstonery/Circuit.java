@@ -7,6 +7,7 @@ import java.util.Collections;
 public class Circuit {
     private final String name;
     private final Set<String> descriptions;
+    private Set<CircuitBlock> blocks;
 
     public Circuit(String name) {
         if (name == null) {
@@ -14,6 +15,7 @@ public class Circuit {
         }
         this.name = name;
         this.descriptions = new HashSet<>();
+        this.blocks = new HashSet<>();
     }
 
     public String getName() {
@@ -30,5 +32,13 @@ public class Circuit {
 
     public void addDescription(String description) {
         descriptions.add(description);
+    }
+
+    public Set<CircuitBlock> getBlocks() {
+        return Collections.unmodifiableSet(blocks);
+    }
+
+    public void setBlocks(Set<CircuitBlock> blocks) {
+        this.blocks = blocks;
     }
 }
