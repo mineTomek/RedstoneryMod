@@ -14,8 +14,7 @@
 
     "commands.redstonery.see.descriptions": "Descriptions",
     "commands.redstonery.see.no_descriptions": "No descriptions",
-    "commands.redstonery.see.blocks": "Blocks:",
-    "commands.redstonery.see.no_blocks": "No blocks",
+    "commands.redstonery.see.blocks_count": "%d Blocks",
 
     "commands.redstonery.selection.player_not_holding_selector": "Player isn't holding the Redstone Selector",
     "commands.redstonery.error.selection.empty": "The selection is empty",

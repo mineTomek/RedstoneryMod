@@ -170,6 +170,9 @@ public final class RedstoneryCommand {
                 throw new CommandException(Text.translatable("commands.redstonery.error.selection.nonexistent_circuit_name", StringArgumentType.getString(ctx, "name")));
         }
 
+        String circuitName = currentCircuit.getName();
+        ctx.getSource().sendFeedback(() -> Text.of(circuitName + ":"), true);
+
         ctx.getSource().sendFeedback(() -> Text.translatable("commands.redstonery.see.descriptions"), true);
 
         if (currentCircuit.getDescriptions().isEmpty()) {
@@ -180,15 +183,8 @@ public final class RedstoneryCommand {
                 }
         }
 
-        ctx.getSource().sendFeedback(() -> Text.translatable("commands.redstonery.see.blocks"), true);
-
-        if (currentCircuit.getBlocks().isEmpty()) {
-                ctx.getSource().sendFeedback(() -> Text.translatable("commands.redstonery.see.no_blocks"), true);
-        } else {
-                for (CircuitBlock block : currentCircuit.getBlocks()) {
-                        ctx.getSource().sendFeedback(() -> Text.of(block.getId()), true);
-                }
-        }
+        int blockCount = currentCircuit.getBlocks().size();
+        ctx.getSource().sendFeedback(() -> Text.translatable("commands.redstonery.see.blocks_count", blockCount), true);
 
         return Command.SINGLE_SUCCESS;
     }
