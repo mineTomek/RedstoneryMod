@@ -329,10 +329,7 @@ public final class RedstoneryCommand {
                 }
         }
 
-        if (power == null) {
-                return 0;
-        }
-        
+        if (power == null) return 0;
         return power;
     }
     
