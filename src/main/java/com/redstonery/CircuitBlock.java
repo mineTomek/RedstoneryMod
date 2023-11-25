@@ -5,7 +5,7 @@ import net.minecraft.util.math.Direction;
 public class CircuitBlock {
     private String id;
     private Direction facing;
-    private boolean state;
+    private int power;
     private boolean locked;
     private int delay;
     private boolean subtract;
@@ -13,11 +13,11 @@ public class CircuitBlock {
     private int page;
     private boolean inverted;
 
-    public CircuitBlock(String id, Direction facing, boolean state, boolean locked, int delay,
+    public CircuitBlock(String id, Direction facing, int power, boolean locked, int delay,
             boolean subtract, boolean open, int page, boolean inverted) {
         this.id = id;
         this.facing = facing;
-        this.state = state;
+        this.power = power;
         this.locked = locked;
         this.delay = delay;
         this.subtract = subtract;
@@ -42,12 +42,12 @@ public class CircuitBlock {
         this.facing = facing;
     }
 
-    public boolean getState() {
-        return state;
+    public int getPower() {
+        return power;
     }
 
-    public void setState(boolean state) {
-        this.state = state;
+    public void setPower(int power) {
+        this.power = power;
     }
 
     public boolean isLocked() {
