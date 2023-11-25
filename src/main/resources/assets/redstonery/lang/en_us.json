@@ -1,6 +1,6 @@
 {
     "item.redstonery.redstone_selector": "Redstone Selector",
-    
+
     "item.redstonery.redstone_selector.tooltip.pos1": "Position 1: %d",
     "item.redstonery.redstone_selector.tooltip.pos2": "Position 2: %d",
 
@@ -10,5 +10,15 @@
     "commands.redstonery.listCircuits": "Circuits:",
     "commands.redstonery.circuitListEmpty": "Circuits list is empty",
 
-    "commands.redstonery.clearedCircuits": "Successfully cleared circuit list"
+    "commands.redstonery.clearedCircuits": "Successfully cleared circuit list",
+
+    "commands.redstonery.see.descriptions": "Descriptions",
+    "commands.redstonery.see.no_descriptions": "No descriptions",
+    "commands.redstonery.see.blocks": "Blocks:",
+    "commands.redstonery.see.no_blocks": "No blocks",
+
+    "commands.redstonery.selection.player_not_holding_selector": "Player isn't holding the Redstone Selector",
+    "commands.redstonery.error.selection.empty": "The selection is empty",
+    "commands.redstonery.error.selection.not_complete": "The selection has only one corner",
+    "commands.redstonery.error.selection.nonexistent_circuit_name": "Circuit named \"%d\" doesn't exist"
 }
