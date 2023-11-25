@@ -257,8 +257,8 @@ public final class RedstoneryCommand {
     }
 
     private static void saveBlock(CommandContext<ServerCommandSource> ctx, Set<CircuitBlock> blocks, BlockPos pos, BlockState state) {
-        Direction direction = getDirection(ctx, state);
-        int powered = getPower(ctx, pos, state);
+        Direction direction = getDirection(state);
+        int powered = getPower(pos, state, ctx.getSource().getWorld());
         boolean locked = getLocked(state);
         int delay = getDelay(state);
         boolean subtract = getSubtract(state);
@@ -273,7 +273,7 @@ public final class RedstoneryCommand {
         blocks.add(circuitBlock);
     }
 
-    private static Direction getDirection(CommandContext<ServerCommandSource> ctx, BlockState state) {
+    private static Direction getDirection(BlockState state) {
         Direction direction = null;
 
         if (state.getBlock() instanceof HorizontalFacingBlock)
@@ -295,19 +295,12 @@ public final class RedstoneryCommand {
         if (state.getBlock() instanceof WallRedstoneTorchBlock)
                 direction = state.get(WallRedstoneTorchBlock.FACING);
 
-        if (direction == null) {
-                ctx.getSource().sendFeedback(() -> Text.of("X " + Registries.BLOCK.getId(state.getBlock()).toString() + " direction: none"), true);
-                return null;
-        }
-        
-        String directionName = direction.getName();
-        
-        ctx.getSource().sendFeedback(() -> Text.of("- " + Registries.BLOCK.getId(state.getBlock()).toString() + " direction: " + directionName), true);
+        if (direction == null) return null;
         
         return direction;
     }
     
-    private static int getPower(CommandContext<ServerCommandSource> ctx, BlockPos pos, BlockState state) {
+    private static int getPower(BlockPos pos, BlockState state, ServerWorld world) {
         Integer power = null;
 
         if (state.getBlock() instanceof RedstoneBlock)
@@ -328,11 +321,8 @@ public final class RedstoneryCommand {
                         if (method.getName() == "calculateOutputSignal") {
                                 method.setAccessible(true);
                                 try {
-                                        ctx.getSource().sendFeedback(() -> Text.of("Running the method..."), true);
-                                        power = (int)method.invoke((ComparatorBlock)state.getBlock(), ctx.getSource().getWorld(), pos, state);
+                                        power = (int)method.invoke((ComparatorBlock)state.getBlock(), world, pos, state);
                                 } catch (Exception e) {
-                                        ctx.getSource().sendFeedback(() -> Text.of("Error..."), true);
-                                        ctx.getSource().sendFeedback(() -> Text.of(e.getMessage()), true);
                                         return 0;
                                 }
                         }
@@ -340,13 +330,8 @@ public final class RedstoneryCommand {
         }
 
         if (power == null) {
-                ctx.getSource().sendFeedback(() -> Text.of("X " + Registries.BLOCK.getId(state.getBlock()).toString() + " power: none"), true);
                 return 0;
         }
-        
-        String powerString = power.toString();
-        
-        ctx.getSource().sendFeedback(() -> Text.of("- " + Registries.BLOCK.getId(state.getBlock()).toString() + " power: " + powerString), true);
         
         return power;
     }
