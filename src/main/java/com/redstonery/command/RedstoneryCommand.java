@@ -4,7 +4,10 @@ import com.google.gson.Gson;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.tree.ArgumentCommandNode;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.redstonery.Circuit;
 import com.redstonery.CircuitBlock;
 import com.redstonery.Redstonery;
@@ -52,77 +55,43 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
 public final class RedstoneryCommand {
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
-        dispatcher.register(
-                .then(
-                    literal("add")
-            literal("circuit").requires(source -> source.hasPermissionLevel(1))
-                        .then(
-                            argument("name", StringArgumentType.word())
-                                .executes(ctx -> addCircuit(ctx))
-                        )
-                )
-                .then(
-                    literal("list")
-                        .executes(ctx -> listCircuits(ctx))
-                        .then(
-                            literal("clear")
-                                .executes(ctx -> clearCircuits(ctx))
-                        )
-                )
-                .then(
-                        literal("see")
-                                .then(
-                                        argument("name", StringArgumentType.word())
-                                                .executes(ctx -> seeCircuit(ctx))
-                                )
-                )
-                .then(
-                    literal("modify")
-                        .then(
-                            argument("name", StringArgumentType.word())
-                                .then(
-                                    literal("descriptions")
-                                        .then(
-                                            literal("list")
-                                        )
-                                        .then(
-                                            literal("add")
-                                                .then(
-                                                    argument("name", StringArgumentType.word())
-                                                )
-                                        )
-                                        .then(
-                                            literal("clear")
-                                        )
-                                )
-                                .then(
-                                        literal("selection")
-                                                .then(
-                                                literal("give")
-                                                )
-                                                .then(
-                                                literal("replace")
-                                                        .executes(ctx -> saveSelection(ctx))
-                                                )
-                                )
-                        )
-                        
-                )
-);
+        public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
+                RequiredArgumentBuilder<ServerCommandSource, String> nameArgument = argument("name", StringArgumentType
+                                .word());
 
-    }
+                LiteralCommandNode<ServerCommandSource> addNode = literal("add").then(
+                                nameArgument.executes(ctx -> addCircuit(ctx)))
+                                .build();
 
-    private static int addCircuit(CommandContext<ServerCommandSource> ctx) {
-        String circuitName = StringArgumentType.getString(ctx, "name");
+                LiteralCommandNode<ServerCommandSource> listNode = literal("list")
+                                .executes(ctx -> listCircuits(ctx))
+                                .then(literal("clear").executes(ctx -> clearCircuits(ctx)))
+                                .build();
 
-        Circuit circuit = new Circuit(circuitName);
+                LiteralCommandNode<ServerCommandSource> seeNode = literal("see")
+                                .then(nameArgument.executes(ctx -> seeCircuit(ctx)))
+                                .build();
 
-        HashSet<Circuit> circuits = getCircuits(ctx.getSource().getServer());
+                LiteralCommandNode<ServerCommandSource> descriptionsNode = literal("descriptions")
+                                .then(literal("list"))
+                                .then(literal("add").then(nameArgument))
+                                .then(literal("clear")).build();
 
-        if (containsCircuitWithName(circuits, circuitName)) {
-            throw new CommandException(Text.translatable("commands.redstonery.error.circuit_exists", circuitName));
-        }
+                LiteralCommandNode<ServerCommandSource> selectionNode = literal("selection")
+                                .then(literal("give"))
+                                .then(literal("replace").executes(ctx -> saveSelection(ctx)))
+                                .build();
+
+                LiteralCommandNode<ServerCommandSource> modifyNode = literal("modify")
+                                .then(nameArgument.then(descriptionsNode).then(selectionNode))
+                                .build();
+
+                dispatcher.register(literal("circuit")
+                                .requires(source -> source.hasPermissionLevel(1))
+                                .then(addNode)
+                                .then(listNode)
+                                .then(seeNode)
+                                .then(modifyNode));
 
         circuits.add(circuit);
             ctx.getSource().sendFeedback(() -> Text.translatable("commands.redstonery.addedCircuit", circuitName),
