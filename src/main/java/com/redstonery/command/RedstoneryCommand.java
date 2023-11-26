@@ -54,12 +54,9 @@ import net.minecraft.util.math.Direction;
 public final class RedstoneryCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(
-    literal("redstonery")
-        .requires(source -> source.hasPermissionLevel(1))
-        .then(
-            literal("circuit")
                 .then(
                     literal("add")
+            literal("circuit").requires(source -> source.hasPermissionLevel(1))
                         .then(
                             argument("name", StringArgumentType.word())
                                 .executes(ctx -> addCircuit(ctx))
@@ -112,7 +109,6 @@ public final class RedstoneryCommand {
                         )
                         
                 )
-        )
 );
 
     }
