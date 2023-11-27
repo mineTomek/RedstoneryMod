@@ -313,6 +313,8 @@ public final class RedstoneryCommand {
                         }
 
                         currentCircuit.setBlocks(blocks);
+
+                        ctx.getSource().sendFeedback(() -> Text.translatable("commands.redstonery.save.success", StringArgumentType.getString(ctx, "name")), false);
                 } else {
                         throw new CommandException(
                                         Text.translatable("commands.redstonery.selection.player_not_holding_selector"));
