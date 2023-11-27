@@ -56,11 +56,8 @@ import net.minecraft.util.math.Direction;
 
 public final class RedstoneryCommand {
         public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
-                RequiredArgumentBuilder<ServerCommandSource, String> nameArgument = argument("name", StringArgumentType
-                                .word());
-
                 LiteralCommandNode<ServerCommandSource> addNode = literal("add").then(
-                                nameArgument.executes(ctx -> addCircuit(ctx)))
+                                argument("name", StringArgumentType.word()).executes(ctx -> addCircuit(ctx)))
                                 .build();
 
                 LiteralCommandNode<ServerCommandSource> listNode = literal("list")
@@ -69,22 +66,20 @@ public final class RedstoneryCommand {
                                 .build();
 
                 LiteralCommandNode<ServerCommandSource> seeNode = literal("see")
-                                .then(nameArgument.executes(ctx -> seeCircuit(ctx, false))
-                                        .then(literal("withBlocks").executes(ctx -> seeCircuit(ctx, true)))
-                                )
+                                .then(argument("name", StringArgumentType.word()).executes(ctx -> seeCircuit(ctx, false))
+                                                .then(literal("withBlocks").executes(ctx -> seeCircuit(ctx, true))))
                                 .build();
 
                 LiteralCommandNode<ServerCommandSource> descriptionsNode = literal("descriptions")
-                                .then(literal("list"))
-                                .then(literal("add").then(nameArgument))
-                                .then(literal("clear")).build();
-
-                LiteralCommandNode<ServerCommandSource> selectionNode = literal("save")
-                                .executes(ctx -> saveSelection(ctx))
+                                .then(argument("name", StringArgumentType.word())
+                                        .then(literal("list").executes(ctx -> listDescriptions(ctx)))
+                                        .then(literal("add").then(argument("description", StringArgumentType.greedyString()).executes(ctx -> addDescription(ctx))))
+                                        .then(literal("clear").executes(ctx -> clearDescriptions(ctx)))
+                                ).build();
                                 .build();
 
-                LiteralCommandNode<ServerCommandSource> modifyNode = literal("modify")
-                                .then(nameArgument.then(descriptionsNode).then(selectionNode))
+                LiteralCommandNode<ServerCommandSource> exportNode = literal("export")
+                                .then(literal("all").executes(ctx -> exportSelection(ctx)))
                                 .build();
 
                 dispatcher.register(literal("circuit")
@@ -92,7 +87,9 @@ public final class RedstoneryCommand {
                                 .then(addNode)
                                 .then(listNode)
                                 .then(seeNode)
-                                .then(modifyNode));
+                                .then(saveNode)
+                                .then(descriptionsNode)
+                                .then(exportNode));
 
         }
 
