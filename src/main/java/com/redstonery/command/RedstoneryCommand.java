@@ -495,6 +495,92 @@ public final class RedstoneryCommand {
                 return false;
         }
 
+        private static int addDescription(CommandContext<ServerCommandSource> ctx) {
+                Circuit currentCircuit = null;
+                for (Circuit circuit : getCircuits(
+                                ctx.getSource().getServer())) {
+                        if (circuit.getName()
+                                        .equals(StringArgumentType
+                                                        .getString(ctx, "name"))) {
+                                currentCircuit = circuit;
+                        }
+                }
+                if (currentCircuit == null) {
+                        throw new CommandException(Text.translatable(
+                                "commands.redstonery.error.selection.nonexistent_circuit_name",
+                                StringArgumentType
+                                .getString(ctx, "name")));
+                }
+
+                String newDescription = StringArgumentType.getString(ctx, "description");
+
+                currentCircuit.addDescription(newDescription);
+
+                ctx.getSource().sendFeedback(() -> Text.translatable("commands.redstonery.description.add.success", StringArgumentType.getString(ctx, "name")), false);
+
+                return Command.SINGLE_SUCCESS;
+        }
+
+        private static int clearDescriptions(CommandContext<ServerCommandSource> ctx) {
+                Circuit currentCircuit = null;
+                for (Circuit circuit : getCircuits(
+                                ctx.getSource().getServer())) {
+                        if (circuit.getName()
+                                        .equals(StringArgumentType
+                                                        .getString(ctx, "name"))) {
+                                currentCircuit = circuit;
+                        }
+                }
+                if (currentCircuit == null) {
+                        throw new CommandException(Text.translatable(
+                                "commands.redstonery.error.selection.nonexistent_circuit_name",
+                                StringArgumentType
+                                .getString(ctx, "name")));
+                }
+
+                currentCircuit.clearDescriptions();
+
+                ctx.getSource().sendFeedback(() -> Text.translatable("commands.redstonery.descriptions.clear.success", StringArgumentType.getString(ctx, "name")), false);
+
+                return Command.SINGLE_SUCCESS;
+        }
+
+        private static int listDescriptions(CommandContext<ServerCommandSource> ctx) {
+                Circuit currentCircuit = null;
+                for (Circuit circuit : getCircuits(
+                                ctx.getSource().getServer())) {
+                        if (circuit.getName()
+                                        .equals(StringArgumentType
+                                                        .getString(ctx, "name"))) {
+                                currentCircuit = circuit;
+                        }
+                }
+                if (currentCircuit == null) {
+                        throw new CommandException(Text.translatable(
+                                "commands.redstonery.error.selection.nonexistent_circuit_name",
+                                StringArgumentType
+                                .getString(ctx, "name")));
+                }
+
+                if (currentCircuit.getDescriptions().isEmpty()) {
+                        ctx.getSource().sendFeedback(() -> Text.translatable("commands.redstonery.descriptions.empty", StringArgumentType.getString(ctx, "name")), false);
+                        return Command.SINGLE_SUCCESS;
+                }
+
+                boolean odd = true;
+                for (String description : currentCircuit.getDescriptions()) {
+                        boolean isOdd = odd;
+                        ctx.getSource().sendFeedback(
+                                        () -> Text.literal(description)
+                                                        .formatted(isOdd ? Formatting.GRAY : Formatting.RESET),
+                                        true);
+
+                        odd = !odd;
+                }
+
+                return Command.SINGLE_SUCCESS;
+        }
+
         private static boolean containsCircuitWithName(
                         HashSet<Circuit> circuits,
                         String targetName) {
