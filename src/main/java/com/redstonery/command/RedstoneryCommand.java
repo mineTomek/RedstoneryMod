@@ -219,9 +219,10 @@ public final class RedstoneryCommand {
                                 boolean isOdd = odd;
                                 ctx.getSource().sendFeedback(
                                                 () -> Text.literal(new Gson()
-                                                                .toJson(block)).formatted(isOdd ? Formatting.GRAY : Formatting.RESET),
+                                                                .toJson(block))
+                                                                .formatted(isOdd ? Formatting.GRAY : Formatting.RESET),
                                                 true);
-                                
+
                                 odd = !odd;
                         }
                 }
