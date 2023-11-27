@@ -76,6 +76,10 @@ public final class RedstoneryCommand {
                                         .then(literal("add").then(argument("description", StringArgumentType.greedyString()).executes(ctx -> addDescription(ctx))))
                                         .then(literal("clear").executes(ctx -> clearDescriptions(ctx)))
                                 ).build();
+
+                LiteralCommandNode<ServerCommandSource> saveNode = literal("save")
+                                .then(literal("to").then(
+                                        argument("name", StringArgumentType.word()).executes(ctx -> saveSelection(ctx))))
                                 .build();
 
                 LiteralCommandNode<ServerCommandSource> exportNode = literal("export")
