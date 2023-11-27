@@ -49,6 +49,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -68,7 +69,9 @@ public final class RedstoneryCommand {
                                 .build();
 
                 LiteralCommandNode<ServerCommandSource> seeNode = literal("see")
-                                .then(nameArgument.executes(ctx -> seeCircuit(ctx)))
+                                .then(nameArgument.executes(ctx -> seeCircuit(ctx, false))
+                                        .then(literal("withBlocks").executes(ctx -> seeCircuit(ctx, true)))
+                                )
                                 .build();
 
                 LiteralCommandNode<ServerCommandSource> descriptionsNode = literal("descriptions")
@@ -159,7 +162,7 @@ public final class RedstoneryCommand {
                 return Command.SINGLE_SUCCESS;
         }
 
-        private static int seeCircuit(CommandContext<ServerCommandSource> ctx) {
+        private static int seeCircuit(CommandContext<ServerCommandSource> ctx, boolean withBlocks) {
                 Circuit currentCircuit = null;
                 for (Circuit circuit : getCircuits(
                                 ctx.getSource().getServer())) {
@@ -204,9 +207,23 @@ public final class RedstoneryCommand {
                 int blockCount = currentCircuit
                                 .getBlocks()
                                 .size();
+
                 ctx.getSource().sendFeedback(
                                 () -> Text.translatable("commands.redstonery.see.blocks_count", blockCount),
                                 true);
+
+                if (withBlocks) {
+                        boolean odd = true;
+                        for (CircuitBlock block : currentCircuit.getBlocks()) {
+                                boolean isOdd = odd;
+                                ctx.getSource().sendFeedback(
+                                                () -> Text.literal(new Gson()
+                                                                .toJson(block)).formatted(isOdd ? Formatting.GRAY : Formatting.RESET),
+                                                true);
+                                
+                                odd = !odd;
+                        }
+                }
 
                 return Command.SINGLE_SUCCESS;
         }
@@ -337,11 +354,6 @@ public final class RedstoneryCommand {
                                 open,
                                 page,
                                 inverted);
-
-                ctx.getSource().sendFeedback(
-                                () -> Text.of(new Gson()
-                                                .toJson(circuitBlock)),
-                                true);
 
                 blocks.add(circuitBlock);
         }
