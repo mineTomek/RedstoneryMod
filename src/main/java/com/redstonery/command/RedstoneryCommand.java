@@ -76,9 +76,8 @@ public final class RedstoneryCommand {
                                 .then(literal("add").then(nameArgument))
                                 .then(literal("clear")).build();
 
-                LiteralCommandNode<ServerCommandSource> selectionNode = literal("selection")
-                                .then(literal("give"))
-                                .then(literal("replace").executes(ctx -> saveSelection(ctx)))
+                LiteralCommandNode<ServerCommandSource> selectionNode = literal("save")
+                                .executes(ctx -> saveSelection(ctx))
                                 .build();
 
                 LiteralCommandNode<ServerCommandSource> modifyNode = literal("modify")
