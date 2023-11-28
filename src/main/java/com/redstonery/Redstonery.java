@@ -1,6 +1,7 @@
 package com.redstonery;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
@@ -15,6 +16,7 @@ import net.minecraft.util.Rarity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.redstonery.command.RedstoneryCommand;
 import com.redstonery.item.RedstoneSelector;
 
 public class Redstonery implements ModInitializer {
@@ -22,6 +24,10 @@ public class Redstonery implements ModInitializer {
 
 	public static final RedstoneSelector REDSTONE_SELECTOR = new RedstoneSelector(
 			new FabricItemSettings().rarity(Rarity.EPIC).maxCount(1));
+
+	public static final String MOD_ID = "redstonery";
+
+	public static final Identifier CIRCUITS = new Identifier(MOD_ID, "circuits");
 
 	@Override
 	public void onInitialize() {
@@ -37,9 +43,7 @@ public class Redstonery implements ModInitializer {
 					|| player.getItemCooldownManager().isCoolingDown(REDSTONE_SELECTOR)) {
 				return ActionResult.PASS;
 			}
-
-			LOGGER.info("Block " + world.getBlockState(pos).getBlock().getName() + " attacked by " + player.getName());
-
+			
 			((RedstoneSelector) player.getStackInHand(hand).getItem()).onSelect(player, pos, world);
 
 			player.getStackInHand(hand).getOrCreateNbt().putIntArray("redstonery.pos2",
@@ -47,5 +51,9 @@ public class Redstonery implements ModInitializer {
 
 			return ActionResult.FAIL;
 		});
+
+		CommandRegistrationCallback.EVENT
+				.register(
+						(dispatcher, registryAccess, environment) -> RedstoneryCommand.register(dispatcher));
 	}
 }
