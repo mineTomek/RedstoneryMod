@@ -101,21 +101,20 @@ public final class RedstoneryCommand {
                 String circuitName = StringArgumentType
                                 .getString(ctx, "name");
 
-                Circuit circuit = new Circuit(circuitName);
-
                 HashSet<Circuit> circuits = getCircuits(ctx.getSource()
                                 .getServer());
 
-                if (containsCircuitWithName(
-                                circuits,
-                                circuitName)) {
+                if (getCircuitByName(circuits, circuitName) != null) {
                         throw new CommandException(
                                         Text.translatable(
                                                         "commands.redstonery.error.circuit_exists",
                                                         circuitName));
                 }
 
+                Circuit circuit = new Circuit(circuitName);
+
                 circuits.add(circuit);
+                
                 ctx.getSource().sendFeedback(
                                 () -> Text.translatable(
                                                 "commands.redstonery.addedCircuit",
@@ -581,15 +580,15 @@ public final class RedstoneryCommand {
                 return Command.SINGLE_SUCCESS;
         }
 
-        private static boolean containsCircuitWithName(
+        private static Circuit getCircuitByName(
                         HashSet<Circuit> circuits,
                         String targetName) {
                 for (Circuit circuit : circuits) {
                         if (circuit.getName().equals(targetName)) {
-                                return true;
+                                return circuit;
                         }
                 }
-                return false;
+                return null;
         }
 
         private static HashSet<Circuit> getCircuits(
