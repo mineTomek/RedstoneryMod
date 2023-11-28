@@ -513,15 +513,15 @@ public final class RedstoneryCommand {
                                 if (allCircuits) {
                                         fileWriter.write(new Gson().toJson(getCircuits(ctx.getSource().getServer())));
 
-                                        ctx.getSource().sendFeedback(() -> Text.translatable("commands.redstonery.export.success"), false);
+                                        ctx.getSource().sendFeedback(() -> Text.translatable("commands.redstonery.export.success.all"), false);
                                 } else {
                                         String circuitName = StringArgumentType.getString(ctx, "name");
                                         Circuit circuit = getCircuitByName(getCircuits(ctx.getSource().getServer()), circuitName);
-                                        
+
                                         if (circuit != null) {
                                                 fileWriter.write(new Gson().toJson(new Circuit[] { circuit }));
 
-                                                ctx.getSource().sendFeedback(() -> Text.translatable("commands.redstonery.export.success"), false);
+                                                ctx.getSource().sendFeedback(() -> Text.translatable("commands.redstonery.export.success", circuitName), false);
                                         }
                                 }
                         }
