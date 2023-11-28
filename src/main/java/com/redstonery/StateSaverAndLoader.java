@@ -17,7 +17,6 @@ public class StateSaverAndLoader extends PersistentState {
     @Override
     public NbtCompound writeNbt(NbtCompound nbt) {
         String circuitSerialized = new Gson().toJson(circuits);
-        Redstonery.LOGGER.info(circuitSerialized);
         nbt.putString("circuits", circuitSerialized);
         return nbt;
     }

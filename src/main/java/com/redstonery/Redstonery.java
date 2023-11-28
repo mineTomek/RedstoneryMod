@@ -43,9 +43,7 @@ public class Redstonery implements ModInitializer {
 					|| player.getItemCooldownManager().isCoolingDown(REDSTONE_SELECTOR)) {
 				return ActionResult.PASS;
 			}
-
-			LOGGER.info("Block " + world.getBlockState(pos).getBlock().getName() + " attacked by " + player.getName());
-
+			
 			((RedstoneSelector) player.getStackInHand(hand).getItem()).onSelect(player, pos, world);
 
 			player.getStackInHand(hand).getOrCreateNbt().putIntArray("redstonery.pos2",
