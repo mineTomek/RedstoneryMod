@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.redstonery.Circuit;
@@ -18,8 +17,11 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Arrays;
 import java.util.List;
-
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ButtonBlock;
@@ -51,6 +53,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
+import net.minecraft.util.WorldSavePath;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
@@ -82,8 +85,10 @@ public final class RedstoneryCommand {
                                         argument("name", StringArgumentType.word()).executes(ctx -> saveSelection(ctx))))
                                 .build();
 
-                LiteralCommandNode<ServerCommandSource> exportNode = literal("export")
-                                .then(literal("all").executes(ctx -> exportSelection(ctx)))
+                LiteralCommandNode<ServerCommandSource> exportNode = literal("export").then(
+                                argument("set name", StringArgumentType.word())
+                                        .then(literal("all").executes(ctx -> exportSet(ctx, true)))
+                                        .then(literal("only").then(argument("name", StringArgumentType.word()).executes(ctx -> exportSet(ctx, false)))))
                                 .build();
 
                 dispatcher.register(literal("circuit")
@@ -114,7 +119,7 @@ public final class RedstoneryCommand {
                 Circuit circuit = new Circuit(circuitName);
 
                 circuits.add(circuit);
-                
+
                 ctx.getSource().sendFeedback(
                                 () -> Text.translatable(
                                                 "commands.redstonery.addedCircuit",
@@ -492,6 +497,39 @@ public final class RedstoneryCommand {
                 }
 
                 return false;
+        }
+
+        private static int exportSet(CommandContext<ServerCommandSource> ctx, boolean allCircuits) {
+                try {
+                        Path savePath = ctx.getSource().getServer().getSavePath(WorldSavePath.ROOT);
+                        Path subdirectoryPath = savePath.resolve("circuit_sets/");
+                        Path filePath = subdirectoryPath.resolve(String.format("%s.json", StringArgumentType.getString(ctx, "set name")));
+
+                        Files.createDirectories(subdirectoryPath);
+
+                        Files.createFile(filePath);
+
+                        try (FileWriter fileWriter = new FileWriter(filePath.toFile())) {
+                                if (allCircuits) {
+                                        fileWriter.write(new Gson().toJson(getCircuits(ctx.getSource().getServer())));
+
+                                        ctx.getSource().sendFeedback(() -> Text.translatable("commands.redstonery.export.success"), false);
+                                } else {
+                                        String circuitName = StringArgumentType.getString(ctx, "name");
+                                        Circuit circuit = getCircuitByName(getCircuits(ctx.getSource().getServer()), circuitName);
+                                        
+                                        if (circuit != null) {
+                                                fileWriter.write(new Gson().toJson(new Circuit[] { circuit }));
+
+                                                ctx.getSource().sendFeedback(() -> Text.translatable("commands.redstonery.export.success"), false);
+                                        }
+                                }
+                        }
+                } catch (IOException e) {
+                        throw new CommandException(Text.of("IO Exception: " + e.getMessage()));
+                }
+
+                return Command.SINGLE_SUCCESS;
         }
 
         private static int addDescription(CommandContext<ServerCommandSource> ctx) {
