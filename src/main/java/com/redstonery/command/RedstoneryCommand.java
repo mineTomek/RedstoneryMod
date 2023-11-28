@@ -180,7 +180,7 @@ public final class RedstoneryCommand {
                 if (currentCircuit == null) {
                         throw new CommandException(
                                         Text.translatable(
-                                                        "commands.redstonery.error.selection.nonexistent_circuit_name",
+                                                        "commands.redstonery.error.nonexistent_circuit_name",
                                                         StringArgumentType
                                                                         .getString(ctx, "name")));
                 }
@@ -289,7 +289,7 @@ public final class RedstoneryCommand {
                         if (currentCircuit == null) {
                                 throw new CommandException(
                                                 Text.translatable(
-                                                                "commands.redstonery.error.selection.nonexistent_circuit_name",
+                                                                "commands.redstonery.error.nonexistent_circuit_name",
                                                                 StringArgumentType
                                                                                 .getString(ctx, "name")));
                         }
@@ -321,7 +321,7 @@ public final class RedstoneryCommand {
                         ctx.getSource().sendFeedback(() -> Text.translatable("commands.redstonery.save.success", StringArgumentType.getString(ctx, "name")), false);
                 } else {
                         throw new CommandException(
-                                        Text.translatable("commands.redstonery.selection.player_not_holding_selector"));
+                                        Text.translatable("commands.redstonery.error.selection.player_not_holding_selector"));
                 }
 
                 return Command.SINGLE_SUCCESS;
@@ -544,7 +544,7 @@ public final class RedstoneryCommand {
                 }
                 if (currentCircuit == null) {
                         throw new CommandException(Text.translatable(
-                                "commands.redstonery.error.selection.nonexistent_circuit_name",
+                                "commands.redstonery.error.nonexistent_circuit_name",
                                 StringArgumentType
                                 .getString(ctx, "name")));
                 }
@@ -570,7 +570,7 @@ public final class RedstoneryCommand {
                 }
                 if (currentCircuit == null) {
                         throw new CommandException(Text.translatable(
-                                "commands.redstonery.error.selection.nonexistent_circuit_name",
+                                "commands.redstonery.error.nonexistent_circuit_name",
                                 StringArgumentType
                                 .getString(ctx, "name")));
                 }
@@ -594,7 +594,7 @@ public final class RedstoneryCommand {
                 }
                 if (currentCircuit == null) {
                         throw new CommandException(Text.translatable(
-                                "commands.redstonery.error.selection.nonexistent_circuit_name",
+                                "commands.redstonery.error.nonexistent_circuit_name",
                                 StringArgumentType
                                 .getString(ctx, "name")));
                 }

@@ -16,8 +16,18 @@
     "commands.redstonery.see.no_descriptions": "  No descriptions",
     "commands.redstonery.see.blocks_count": "%d Blocks",
 
-    "commands.redstonery.selection.player_not_holding_selector": "Player isn't holding the Redstone Selector",
+    "commands.redstonery.save.success": "Successfully saved current selection to %d",
+
+    "commands.redstonery.description.add.success": "Successfully added description to %d",
+    "commands.redstonery.description.clear.success": "Successfully cleared descriptions in %d",
+    "commands.redstonery.descriptions.empty": "%d has no descriptions assigned",
+
+    "commands.redstonery.export.success": "Successfully exported %d",
+    "commands.redstonery.export.success.all": "Successfully exported all circuits",
+
+    "commands.redstonery.error.selection.player_not_holding_selector": "Player isn't holding the Redstone Selector",
     "commands.redstonery.error.selection.empty": "The selection is empty",
     "commands.redstonery.error.selection.not_complete": "The selection has only one corner",
-    "commands.redstonery.error.selection.nonexistent_circuit_name": "Circuit named \"%d\" doesn't exist"
+
+    "commands.redstonery.error.nonexistent_circuit_name": "Circuit named \"%d\" doesn't exist"
 }
