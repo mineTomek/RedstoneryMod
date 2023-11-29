@@ -18,3 +18,7 @@ After installing the mod and loading a world you can take the `Redstone Selector
 You can right-click and left-click to place two corners of the selection box.
 
 If you can't find the selection you can sneak to make the selection render through walls.
+
+### Command guide
+
+The command guide is available in the [wiki](https://github.com/mineTomek/RedstoneryMod/wiki/Commands).
